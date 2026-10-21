@@ -37,8 +37,8 @@
 #include "core/templates/hash_set.h"
 #include "core/templates/list.h"
 
-// Godot's packed file magic header ("GDPC" in ASCII).
-#define PACK_HEADER_MAGIC 0x43504447
+// Custom packed file magic header, shared by the editor and export templates.
+#define PACK_HEADER_MAGIC 0x47CCC004
 
 #define PACK_FORMAT_VERSION_V2 2
 #define PACK_FORMAT_VERSION_V3 3
