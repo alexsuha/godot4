@@ -47,16 +47,16 @@ const unsigned long long GODOT_VERSION_TIMESTAMP = {git_timestamp};
 
 
 def encryption_key_builder(target, source, env):
-    src = source[0].read() or "0" * 64
+    src = source[0].get_text_contents().strip()
     try:
+        if len(src) != 64:
+            raise ValueError
         buffer = bytes.fromhex(src)
         if len(buffer) != 32:
             raise ValueError
     except ValueError:
         methods.print_error(
-            f'Invalid AES256 encryption key, not 64 hexadecimal characters: "{src}".\n'
-            "Unset `SCRIPT_AES256_ENCRYPTION_KEY` in your environment "
-            "or make sure that it contains exactly 64 hexadecimal characters."
+            "Invalid AES256 encryption key in encryption/key. Expected exactly 64 hexadecimal characters."
         )
         raise
 

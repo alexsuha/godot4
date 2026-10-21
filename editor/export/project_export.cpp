@@ -426,20 +426,18 @@ void ProjectExportDialog::_edit_preset(int p_index) {
 	enc_directory->set_disabled(!enc_pck_mode);
 	enc_in_filters->set_editable(enc_pck_mode);
 	enc_ex_filters->set_editable(enc_pck_mode);
-	script_key->set_editable(enc_pck_mode);
+	script_key->set_editable(false);
 	show_script_key->set_disabled(!enc_pck_mode);
 	seed_input->set_editable(enc_pck_mode);
 
 	bool enc_directory_mode = current->get_enc_directory();
 	enc_directory->set_pressed(enc_directory_mode);
 
-	String key = current->get_script_encryption_key();
+	String key = EditorExportPlatform::_get_script_encryption_key(current);
 	if (!updating_script_key) {
 		script_key->set_text(key);
 	}
 	if (enc_pck_mode) {
-		script_key->set_editable(true);
-
 		bool key_valid = _validate_script_encryption_key(key);
 		if (key_valid) {
 			script_key_error->hide();
@@ -1892,6 +1890,7 @@ ProjectExportDialog::ProjectExportDialog() {
 	script_key->set_accessibility_name(TTRC("Encryption Key (256-bits as hexadecimal):"));
 	script_key->connect(SceneStringName(text_changed), callable_mp(this, &ProjectExportDialog::_script_encryption_key_changed));
 	script_key->set_secret(true);
+	script_key->set_tooltip_text(TTR("Uses the key embedded from encryption/key when building the engine."));
 
 	show_script_key = memnew(Button);
 	show_script_key->set_toggle_mode(true);
@@ -1914,7 +1913,7 @@ ProjectExportDialog::ProjectExportDialog() {
 
 	Label *sec_info = memnew(Label);
 	sec_info->set_focus_mode(Control::FOCUS_ACCESSIBILITY);
-	sec_info->set_text(TTRC("Note: Encryption key needs to be stored in the binary,\nyou need to build the export templates from source."));
+	sec_info->set_text(TTRC("Encryption key is embedded from encryption/key.\nRebuild the editor and export templates after changing it."));
 	sec_vb->add_child(sec_info);
 
 	LinkButton *sec_more_info = memnew(LinkButton);

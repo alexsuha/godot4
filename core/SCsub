@@ -186,16 +186,11 @@ gen_hash = env.CommandNoCache(
 )
 env.add_source_files(env.core_sources, gen_hash)
 
-# Generate AES256 script encryption key
-encryption_key = os.environ.get("SCRIPT_AES256_ENCRYPTION_KEY")
-if encryption_key:
-    print(
-        "\n*** IMPORTANT: Compiling Godot with custom `SCRIPT_AES256_ENCRYPTION_KEY` set as environment variable."
-        "\n*** Make sure to use templates compiled with this key when exporting a project with encryption.\n"
-    )
+# Embed the fixed engine-local key in both the editor and export templates.
+# Track the file as a dependency so changing it regenerates the compiled key.
 gen_encrypt = env.CommandNoCache(
     "script_encryption_key.gen.cpp",
-    env.Value(encryption_key),
+    env.File("#encryption/key"),
     env.Run(core_builders.encryption_key_builder),
 )
 env.add_source_files(env.core_sources, gen_encrypt)

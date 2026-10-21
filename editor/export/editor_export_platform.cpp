@@ -46,6 +46,7 @@
 #include "core/io/zip_io.h"
 #include "core/math/random_pcg.h"
 #include "core/object/class_db.h"
+#include "core/object/script_language.h"
 #include "core/os/os.h"
 #include "core/os/shared_object.h"
 #include "core/string/translation.h"
@@ -1137,11 +1138,8 @@ String EditorExportPlatform::_export_customize(const String &p_path, LocalVector
 }
 
 String EditorExportPlatform::_get_script_encryption_key(const Ref<EditorExportPreset> &p_preset) {
-	const String from_env = OS::get_singleton()->get_environment(ENV_SCRIPT_ENCRYPTION_KEY);
-	if (!from_env.is_empty()) {
-		return from_env.to_lower();
-	}
-	return p_preset->get_script_encryption_key().to_lower();
+	// Use the same key as the runtime, embedded from encryption/key at build time.
+	return String::hex_encode_buffer(script_encryption_key, 32);
 }
 
 Vector<uint8_t> EditorExportPlatform::_get_script_encryption_key_bytes(const Ref<EditorExportPreset> &p_preset) {

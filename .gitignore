@@ -23,6 +23,7 @@
 ###########################
 
 /custom.py
+/encryption/key
 
 #############################
 ### Godot generated files ###
