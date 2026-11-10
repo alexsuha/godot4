@@ -83,6 +83,17 @@ editor from a source checkout.
    add `arch=arm64` or `arch=x86_64`. The compiled editor is placed in `bin/`.
    Keep the virtual environment activated when building again so the same SCons
    installation is used.
+4. Build and package the macOS export templates:
+
+   ```sh
+   scons platform=macos target=template_debug vulkan=no
+   scons platform=macos target=template_release vulkan=no generate_bundle=yes
+   ```
+
+   Build both targets before packaging: the debug and release templates are
+   included in the generated ZIP under `bin/`. SCons uses the host architecture
+   by default; add `arch=arm64` or `arch=x86_64` to build for a specific
+   architecture.
 
 ## Community and contributing
 
