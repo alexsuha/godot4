@@ -44,6 +44,46 @@ Official binaries for the Godot editor and the export templates can be found
 [See the official docs](https://docs.godotengine.org/en/latest/engine_details/development/compiling)
 for compilation instructions for every supported platform.
 
+#### macOS
+
+The following steps set up a native macOS development environment and build the
+editor from a source checkout.
+
+1. Install Apple's command line developer tools, including Clang and the macOS
+   SDK:
+
+   ```sh
+   xcode-select --install
+   ```
+
+   If you have Xcode installed, make sure its command line tools are selected
+   with `xcode-select -p`.
+2. Install [Homebrew](https://brew.sh/) if needed, then install Python:
+
+   ```sh
+   brew install python
+   ```
+
+   Godot requires Python 3.9 or newer and SCons 4.4 or newer. From the root of
+   the Godot source checkout, create an isolated Python environment and install
+   SCons:
+
+   ```sh
+   python3 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install 'scons>=4.4'
+   ```
+3. Build the macOS editor:
+
+   ```sh
+   scons platform=macos target=editor vulkan=no
+   ```
+
+   SCons detects the host architecture by default. To choose one explicitly,
+   add `arch=arm64` or `arch=x86_64`. The compiled editor is placed in `bin/`.
+   Keep the virtual environment activated when building again so the same SCons
+   installation is used.
+
 ## Community and contributing
 
 Godot is not only an engine but an ever-growing community of users and engine
